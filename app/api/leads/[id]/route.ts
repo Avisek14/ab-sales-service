@@ -7,13 +7,14 @@ import { STAGES } from "@/lib/stages";
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   await connectDB();
-  const lead = await Lead.findById(params.id).lean();
+  const lead = await Lead.findById(id).lean();
   if (!lead) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   return NextResponse.json({ lead });
@@ -23,8 +24,9 @@ export async function GET(
 // like consumerNumber / subsidyAmount / assignedTo.
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -39,7 +41,7 @@ export async function PATCH(
   const update: Record<string, unknown> = { ...rest };
   if (stage) update.stage = stage;
 
-  const lead = await Lead.findById(params.id);
+  const lead = await Lead.findById(id);
   if (!lead) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   Object.assign(lead, update);
@@ -47,7 +49,7 @@ export async function PATCH(
     lead.stageHistory.push({
       stage,
       note,
-      changedBy: session.user?.email ?? undefined,
+      changedBy: session.user?.name ?? undefined,
       at: new Date(),
     });
   }
