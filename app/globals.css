@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+:root {
+  /* Sunrise-over-rooftops palette */
+  --color-ink: #10202f;        /* deep navy — near-black text, night sky */
+  --color-dusk: #1c3a52;       /* panel/nav background */
+  --color-paper: #f7f4ee;      /* warm off-white page background */
+  --color-solar: #f0a63a;      /* amber — solar/energy accent */
+  --color-solar-deep: #d9820f; /* darker amber for hover/emphasis */
+  --color-sky: #3f7fa6;        /* daytime sky blue — secondary accent */
+  --color-line: #dcd5c6;       /* hairline borders on paper */
+  --color-good: #4f7942;       /* completed stage green */
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+  --color-dusk: var(--color-dusk);
+  --color-paper: var(--color-paper);
+  --color-solar: var(--color-solar);
+  --color-solar-deep: var(--color-solar-deep);
+  --color-sky: var(--color-sky);
+  --color-line: var(--color-line);
+  --color-good: var(--color-good);
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-plex-mono);
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-solar);
+  color: var(--color-ink);
+}
