@@ -16,7 +16,7 @@ export default function Nav() {
 
   return (
     <header className="border-b border-line bg-paper/95 backdrop-blur sticky top-0 z-40">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between gap-3 md:justify-start">
         {/* Hamburger — mobile only, left side */}
         <button
           onClick={() => setOpen(!open)}
@@ -56,6 +56,8 @@ export default function Nav() {
         >
           Track my progress
         </Link>
+
+        <span className="md:hidden h-9 w-9 shrink-0" aria-hidden="true" />
       </div>
 
       {/* Mobile menu panel */}
