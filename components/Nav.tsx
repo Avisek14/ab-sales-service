@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -9,32 +12,39 @@ const links = [
 ];
 
 export default function Nav() {
+  const [open, setOpen] = useState(false);
+
   return (
     <header className="border-b border-line bg-paper/95 backdrop-blur sticky top-0 z-40">
-      <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 group">
-          <span className="h-10 w-10 overflow-hidden rounded-full flex items-center justify-center">
-            <Image
-              src="/logo.png"
-              alt="AB Sales & Service"
-              width={40}
-              height={40}
-              className="h-full w-full object-cover scale-125"
-              priority
-            />
-          </span>
-          <span className="font-display text-lg tracking-tight text-ink">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+        {/* Hamburger — mobile only, left side */}
+        <button
+          onClick={() => setOpen(!open)}
+          aria-label="Toggle menu"
+          className="md:hidden shrink-0 h-9 w-9 flex items-center justify-center rounded-md hover:bg-ink/5"
+        >
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M3 6h16M3 11h16M3 16h16" stroke="var(--color-ink)" strokeWidth="1.8" strokeLinecap="round" />
+          </svg>
+        </button>
+
+        <Link href="/" className="flex items-center gap-2 shrink-0">
+          <Image
+            src="/logo.png"
+            alt="AB Sales & Service"
+            width={36}
+            height={36}
+            className="h-9 w-9 object-contain shrink-0"
+            priority
+          />
+          <span className="font-display text-base sm:text-lg tracking-tight text-ink whitespace-nowrap">
             AB Sales &amp; Service
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8 text-sm">
+        <nav className="hidden md:flex items-center gap-8 text-sm ml-auto mr-8">
           {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="text-ink/70 hover:text-ink transition-colors"
-            >
+            <Link key={l.href} href={l.href} className="text-ink/70 hover:text-ink transition-colors">
               {l.label}
             </Link>
           ))}
@@ -42,11 +52,41 @@ export default function Nav() {
 
         <Link
           href="/track"
-          className="rounded-full bg-ink text-paper text-sm px-4 py-2 hover:bg-dusk transition-colors"
+          className="hidden md:inline-block rounded-full bg-ink text-paper text-sm px-4 py-2 hover:bg-dusk transition-colors shrink-0"
         >
           Track my progress
         </Link>
       </div>
+
+      {/* Mobile menu panel */}
+      {open && (
+        <div className="md:hidden border-t border-line bg-paper px-4 py-4 space-y-1">
+          <Link
+            href="/track"
+            onClick={() => setOpen(false)}
+            className="block rounded-lg bg-ink text-paper text-sm px-4 py-2.5 mb-2 text-center"
+          >
+            Track my progress
+          </Link>
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className="block px-2 py-2.5 text-sm text-ink/80 hover:text-ink border-b border-line last:border-0"
+            >
+              {l.label}
+            </Link>
+          ))}
+          <Link
+            href="/dashboard/login"
+            onClick={() => setOpen(false)}
+            className="block px-2 py-2.5 text-xs text-ink/40 hover:text-ink/70 mt-2"
+          >
+            Staff Login
+          </Link>
+        </div>
+      )}
     </header>
   );
 }
