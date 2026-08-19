@@ -3,6 +3,12 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { initMsg91, msg91SendOtp, msg91VerifyOtp } from "@/lib/msg91-client";
+
+function toMsg91Identifier(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+  return digits.startsWith("91") ? digits : `91${digits}`;
+}
 
 export default function DashboardLogin() {
   const router = useRouter();
@@ -16,31 +22,52 @@ export default function DashboardLogin() {
     e.preventDefault();
     setBusy(true);
     setError("");
+
     const res = await fetch("/api/team/request-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ phone }),
     });
-    setBusy(false);
-    if (res.ok) {
-      setStep("otp");
-    } else {
+
+    if (!res.ok) {
       const data = await res.json().catch(() => null);
       setError(data?.error || "You are not an authorized person for this portal.");
+      setBusy(false);
+      return;
     }
+
+    try {
+      const identifier = toMsg91Identifier(phone);
+      await initMsg91(identifier);
+      await msg91SendOtp(identifier);
+      setStep("otp");
+    } catch {
+      setError("Couldn't send the code — check the number and try again.");
+    }
+    setBusy(false);
   }
 
   async function verifyOtp(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
     setError("");
-    const res = await signIn("credentials", { phone, code, redirect: false });
-    setBusy(false);
-    if (res?.ok) {
-      router.push("/dashboard");
-    } else {
+
+    try {
+      const result = await msg91VerifyOtp(code);
+      const res = await signIn("credentials", {
+        phone,
+        accessToken: result.message,
+        redirect: false,
+      });
+      if (res?.ok) {
+        router.push("/dashboard");
+      } else {
+        setError("That code didn't work — check it and try again.");
+      }
+    } catch {
       setError("That code didn't work — check it and try again.");
     }
+    setBusy(false);
   }
 
   return (

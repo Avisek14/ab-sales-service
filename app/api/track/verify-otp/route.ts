@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { msg91VerifyOtp } from "@/lib/msg91";
+import { msg91VerifyAccessToken } from "@/lib/msg91";
 
 export async function POST(req: NextRequest) {
-  const { phone, code } = await req.json();
-  if (!phone || !code) {
-    return NextResponse.json({ error: "Phone and code are required." }, { status: 400 });
+  const { phone, accessToken } = await req.json();
+  if (!phone || !accessToken) {
+    return NextResponse.json({ error: "Phone and access token are required." }, { status: 400 });
   }
 
-  const valid = await msg91VerifyOtp(phone, code);
+  const valid = await msg91VerifyAccessToken(accessToken);
   if (!valid) {
     return NextResponse.json({ error: "Invalid or expired code." }, { status: 401 });
   }

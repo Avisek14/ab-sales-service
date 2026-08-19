@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
-import { msg91SendOtp } from "@/lib/msg91";
 
 export async function POST(req: NextRequest) {
   const { phone } = await req.json();
@@ -18,8 +17,6 @@ export async function POST(req: NextRequest) {
       { status: 403 }
     );
   }
-
-  await msg91SendOtp(phone);
 
   return NextResponse.json({ authorized: true });
 }
