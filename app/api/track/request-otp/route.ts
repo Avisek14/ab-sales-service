@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Lead from "@/models/Lead";
-import OtpToken from "@/models/OtpToken";
-import { sendOtpSms } from "@/lib/sms";
+import { msg91SendOtp } from "@/lib/msg91";
 
 export async function POST(req: NextRequest) {
   const { phone } = await req.json();
@@ -15,13 +14,7 @@ export async function POST(req: NextRequest) {
   // Don't reveal whether the phone number exists — same response either way.
   const exists = await Lead.exists({ phone });
   if (exists) {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    await OtpToken.create({
-      phone,
-      code,
-      expiresAt: new Date(Date.now() + 5 * 60 * 1000),
-    });
-    await sendOtpSms(phone, code);
+    await msg91SendOtp(phone);
   }
 
   return NextResponse.json({ ok: true });

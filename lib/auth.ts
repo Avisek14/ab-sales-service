@@ -2,7 +2,7 @@ import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
-import OtpToken from "@/models/OtpToken";
+import { msg91VerifyOtp } from "@/lib/msg91";
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
@@ -19,18 +19,11 @@ export const authOptions: NextAuthOptions = {
 
         await connectDB();
 
-        // Phone must already be on the pre-authorized team list.
         const user = await User.findOne({ phone: credentials.phone });
         if (!user) return null;
 
-        const token = await OtpToken.findOne({
-          phone: credentials.phone,
-          code: credentials.code,
-          purpose: "team",
-        }).sort({ _id: -1 });
-        if (!token || token.expiresAt < new Date()) return null;
-
-        await OtpToken.deleteMany({ phone: credentials.phone, purpose: "team" });
+        const valid = await msg91VerifyOtp(credentials.phone, credentials.code);
+        if (!valid) return null;
 
         return {
           id: user._id.toString(),
