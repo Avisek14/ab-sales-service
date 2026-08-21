@@ -38,6 +38,12 @@ export async function initMsg91(identifier: string) {
     success: () => {},
     failure: () => {},
   });
+
+  // Widget attaches window.sendOtp asynchronously after init — wait for it.
+  for (let i = 0; i < 50; i++) {
+    if (typeof window.sendOtp === "function") return;
+    await new Promise((r) => setTimeout(r, 100));
+  }
 }
 
 export function msg91SendOtp(identifier: string): Promise<{ message: string }> {
