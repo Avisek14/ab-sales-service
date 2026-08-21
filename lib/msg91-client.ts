@@ -28,12 +28,11 @@ function loadMsg91Script(): Promise<void> {
   return scriptPromise;
 }
 
-export async function initMsg91(identifier: string) {
+export async function initMsg91() {
   await loadMsg91Script();
   window.initSendOTP({
     widgetId: process.env.NEXT_PUBLIC_MSG91_WIDGET_ID,
     tokenAuth: process.env.NEXT_PUBLIC_MSG91_WIDGET_TOKEN,
-    identifier,
     exposeMethods: true,
     success: () => {},
     failure: () => {},

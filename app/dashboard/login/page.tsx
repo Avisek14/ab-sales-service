@@ -38,7 +38,7 @@ export default function DashboardLogin() {
 
     try {
       const identifier = toMsg91Identifier(phone);
-      await initMsg91(identifier);
+      await initMsg91();
       await msg91SendOtp(identifier);
       setStep("otp");
     } catch {
