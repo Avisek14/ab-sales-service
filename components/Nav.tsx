@@ -34,7 +34,7 @@ export default function Nav() {
             alt="AB Sales & Service — Authorised Channel Partner of TATA Power SolaRoof"
             width={1280}
             height={248}
-            className="h-14 w-auto object-contain"
+            className="h-10 sm:h-14 w-auto object-contain"
             priority
           />
         </Link>
