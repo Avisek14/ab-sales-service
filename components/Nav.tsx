@@ -16,7 +16,7 @@ export default function Nav() {
 
   return (
     <header className="border-b border-line bg-paper/95 backdrop-blur sticky top-0 z-40">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between gap-3 md:justify-start">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 h-20 flex items-center justify-between gap-3 md:justify-start">
         {/* Hamburger — mobile only, left side */}
         <button
           onClick={() => setOpen(!open)}
@@ -28,18 +28,15 @@ export default function Nav() {
           </svg>
         </button>
 
-        <Link href="/" className="flex items-center gap-2 shrink-0">
+        <Link href="/" className="flex items-center shrink-0">
           <Image
             src="/logo.png"
-            alt="AB Sales & Service"
-            width={36}
-            height={36}
-            className="h-9 w-9 object-contain shrink-0"
+            alt="AB Sales & Service — Authorised Channel Partner of TATA Power SolaRoof"
+            width={1280}
+            height={248}
+            className="h-14 w-auto object-contain"
             priority
           />
-          <span className="font-display text-base sm:text-lg tracking-tight text-ink whitespace-nowrap">
-            AB Sales &amp; Service
-          </span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm ml-auto mr-8">
