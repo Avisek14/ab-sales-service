@@ -1,8 +1,10 @@
 import Link from "next/link";
+import HeroStats from "@/components/HeroStats";
 
 export default function Home() {
   return (
     <>
+      <HeroStats />
       {/* Hero */}
       <section className="relative overflow-hidden bg-dusk text-paper">
         <svg

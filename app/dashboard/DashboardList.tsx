@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { STAGES, recordType, type Stage } from "@/lib/stages";
+import ImportCsv from "./ImportCsv";
+import PortalStatsUpload from "@/components/PortalStatsUpload";
 
 type LeadRow = {
   _id: string;
@@ -42,6 +44,11 @@ export default function DashboardList() {
 
   return (
     <div>
+      <div className="mb-4 flex flex-wrap gap-2">
+        <ImportCsv onDone={load} />
+        <PortalStatsUpload />
+      </div>
+
       <div className="flex flex-wrap items-center gap-2 mb-6">
         <button
           onClick={() => setFilter("")}
