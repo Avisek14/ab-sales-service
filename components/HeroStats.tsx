@@ -25,7 +25,7 @@ export default function HeroStats() {
   useEffect(() => {
     if (!stats) return;
     let frameId: number;
-    const speed = 0.6; // pixels per frame, roughly
+    const speed = 0.6;
 
     function tick() {
       const stripWidth = stripRef.current?.offsetWidth ?? 0;
@@ -44,22 +44,22 @@ export default function HeroStats() {
     return () => cancelAnimationFrame(frameId);
   }, [stats]);
 
-  if (!stats) return null;
-
-  const items = [
-    { label: "Total Leads", value: stats.totalLeads },
-    { label: "Total Customers", value: stats.totalCustomers },
-    { label: "Total Installations", value: stats.totalInstallations },
-    { label: "Applications Completed", value: stats.totalCompleted },
-  ];
+  const items = stats
+    ? [
+        { label: "Total Leads", value: stats.totalLeads },
+        { label: "Total Customers", value: stats.totalCustomers },
+        { label: "Total Installations", value: stats.totalInstallations },
+        { label: "Applications Completed", value: stats.totalCompleted },
+      ]
+    : [{ label: "Loading live stats", value: "" }];
 
   const Strip = ({ innerRef }: { innerRef?: React.Ref<HTMLDivElement> }) => (
     <div ref={innerRef} className="flex items-center shrink-0">
       {items.map((item, i) => (
         <div key={i} className="flex items-center gap-2 font-mono text-xs px-6 whitespace-nowrap">
           <span className="h-1.5 w-1.5 rounded-full bg-solar animate-pulse shrink-0" />
-          <span className="text-paper/50">{item.label}:</span>
-          <span className="font-semibold text-solar">{item.value}</span>
+          <span className="text-paper/50">{item.label}{stats ? ":" : ""}</span>
+          {stats && <span className="font-semibold text-solar">{item.value}</span>}
         </div>
       ))}
     </div>
